@@ -12,14 +12,13 @@ def extraer_emails(texto):
 def main():
     st.title("Extractor de Direcciones de Correo Electrónico")
 
-    
     # Permitir al usuario cargar un archivo desde su disco local
-    nombre_archivo = st.file_uploader("Cargar archivo de texto", type=['txt'])
-    if nombre_archivo:
+    archivo_cargado = st.file_uploader("Cargar archivo de texto", type=['txt'])
+
+    if archivo_cargado is not None:
         try:
-            # Leer el archivo de texto original con codificación utf-8
-            with open(nombre_archivo, 'r', encoding='utf-8') as archivo_original:
-                texto_original = archivo_original.read()
+            # Leer el contenido del archivo cargado
+            texto_original = archivo_cargado.read().decode("utf-8")
 
             # Extraer las direcciones de correo electrónico del texto original
             emails = extraer_emails(texto_original)
@@ -29,16 +28,17 @@ def main():
             for email in emails:
                 st.write(email)
             
-            # Guardar las direcciones de correo electrónico en otro archivo de texto
-            nombre_archivo_destino = st.text_input("Ingrese el nombre del archivo de destino:")
+            # Permitir al usuario elegir la ubicación y el nombre del archivo de destino
+            nombre_archivo_destino = st.text_input("Ingrese el nombre del archivo de destino (sin extensión):")
             if nombre_archivo_destino:
+                nombre_archivo_destino += ".txt"
                 with open(nombre_archivo_destino, 'w', encoding='utf-8') as archivo_destino:
                     for email in emails:
                         archivo_destino.write(email + '\n')
 
                 st.success(f"Las direcciones de correo electrónico se han guardado en {nombre_archivo_destino}")
-        except FileNotFoundError:
-            st.error("Archivo no encontrado. Por favor, ingrese un nombre de archivo válido.")
+        except UnicodeDecodeError:
+            st.error("No se puede decodificar el archivo. Asegúrate de que el archivo sea de texto plano y esté codificado en UTF-8.")
 
 if __name__ == "__main__":
     main()
