@@ -12,9 +12,9 @@ def extraer_emails(texto):
 
 def main():
     st.title("Extractor de Direcciones de Correo Electrónico")
-
-    # Obtener la lista de carpetas en el disco local
-    carpetas_locales = [dirpath for dirpath, dirnames, filenames in os.walk('.')]
+    # Obtener la lista de carpetas en el directorio actual
+    directorio_actual = os.getcwd()
+    carpetas_locales = [nombre for nombre in os.listdir(directorio_actual) if os.path.isdir(os.path.join(directorio_actual, nombre))]
 
     # Permitir al usuario elegir una carpeta del disco local
     carpeta_elegida = st.selectbox("Elija una carpeta del disco local:", carpetas_locales)
