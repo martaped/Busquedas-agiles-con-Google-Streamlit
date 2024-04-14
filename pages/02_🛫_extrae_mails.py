@@ -1,4 +1,5 @@
 import streamlit as st
+import os
 import re
 
 # Función para extraer direcciones de correo electrónico de un texto
@@ -12,33 +13,43 @@ def extraer_emails(texto):
 def main():
     st.title("Extractor de Direcciones de Correo Electrónico")
 
-    # Permitir al usuario cargar un archivo desde su disco local
-    archivo_cargado = st.file_uploader("Cargar archivo de texto", type=['txt'])
+    # Obtener la lista de carpetas en el disco local
+    carpetas_locales = [dirpath for dirpath, dirnames, filenames in os.walk('.')]
 
-    if archivo_cargado is not None:
-        try:
-            # Leer el contenido del archivo cargado
-            texto_original = archivo_cargado.read().decode("utf-8")
+    # Permitir al usuario elegir una carpeta del disco local
+    carpeta_elegida = st.selectbox("Elija una carpeta del disco local:", carpetas_locales)
 
-            # Extraer las direcciones de correo electrónico del texto original
-            emails = extraer_emails(texto_original)
+    if carpeta_elegida:
+        archivos_en_carpeta = os.listdir(carpeta_elegida)
 
-            # Mostrar las direcciones de correo electrónico encontradas
-            st.subheader("Direcciones de correo electrónico encontradas:")
-            for email in emails:
-                st.write(email)
-            
-            # Permitir al usuario elegir la ubicación y el nombre del archivo de destino
-            nombre_archivo_destino = st.text_input("Ingrese el nombre del archivo de destino (sin extensión):")
-            if nombre_archivo_destino:
-                nombre_archivo_destino += ".txt"
-                with open(nombre_archivo_destino, 'w', encoding='utf-8') as archivo_destino:
-                    for email in emails:
-                        archivo_destino.write(email + '\n')
+        # Permitir al usuario elegir un archivo de la carpeta seleccionada
+        nombre_archivo = st.selectbox("Elija un archivo de la carpeta seleccionada:", archivos_en_carpeta)
 
-                st.success(f"Las direcciones de correo electrónico se han guardado en {nombre_archivo_destino}")
-        except UnicodeDecodeError:
-            st.error("No se puede decodificar el archivo. Asegúrate de que el archivo sea de texto plano y esté codificado en UTF-8.")
+        if nombre_archivo:
+            try:
+                # Leer el archivo de texto original con codificación utf-8
+                with open(os.path.join(carpeta_elegida, nombre_archivo), 'r', encoding='utf-8') as archivo_original:
+                    texto_original = archivo_original.read()
+
+                # Extraer las direcciones de correo electrónico del texto original
+                emails = extraer_emails(texto_original)
+
+                # Mostrar las direcciones de correo electrónico encontradas
+                st.subheader("Direcciones de correo electrónico encontradas:")
+                for email in emails:
+                    st.write(email)
+                
+                # Permitir al usuario elegir la ubicación y el nombre del archivo de destino
+                nombre_archivo_destino = st.text_input("Nombre del archivo de destino (sin extensión): se guardará en la carpeta del archivo Origen")
+                if nombre_archivo_destino:
+                    nombre_archivo_destino += ".txt"
+                    with open(nombre_archivo_destino, 'w', encoding='utf-8') as archivo_destino:
+                        for email in emails:
+                            archivo_destino.write(email + '\n')
+
+                    st.success(f"Las direcciones de correo electrónico se han guardado en {nombre_archivo_destino}")
+            except FileNotFoundError:
+                st.error("Archivo no encontrado. Por favor, elija un archivo válido.")
 
 if __name__ == "__main__":
     main()
