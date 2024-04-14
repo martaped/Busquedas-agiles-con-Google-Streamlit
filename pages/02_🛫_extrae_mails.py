@@ -12,9 +12,9 @@ def extraer_emails(texto):
 def main():
     st.title("Extractor de Direcciones de Correo Electrónico")
 
-    # Solicitar al usuario el nombre del archivo de entrada
-    nombre_archivo = st.text_input("Ingrese el nombre del archivo de texto:")
-
+    
+    # Permitir al usuario cargar un archivo desde su disco local
+    nombre_archivo = st.file_uploader("Cargar archivo de texto", type=['txt'])
     if nombre_archivo:
         try:
             # Leer el archivo de texto original con codificación utf-8
