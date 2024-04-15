@@ -21,9 +21,10 @@ def main():
             # Obtener la ruta del directorio que contiene el archivo
             nombre_archivo = archivo_cargado.name
             ruta_archivo = os.path.abspath(nombre_archivo)
-            ruta_directorio_local = os.path.dirname(os.path.realpath(__file__))
+            ruta_directorio_local = os.getcwd()  # Obtener la ruta del directorio actual
             st.write("Directorio del archivo cargado:", ruta_directorio_local)
             
+            # Leer el contenido del archivo cargado
             texto_original = archivo_cargado.read().decode("utf-8")
 
             # Extraer las direcciones de correo electrónico del texto original
@@ -42,7 +43,7 @@ def main():
                     for email in emails:
                         archivo_destino.write(email + '\n')
 
-                st.success(f"Las direcciones de correo electrónico se han guardado en {ruta_directorio_local}\{nombre_archivo_destino}")
+                st.success(f"Las direcciones de correo electrónico se han guardado en {nombre_archivo_destino}")
         except UnicodeDecodeError:
             st.error("No se puede decodificar el archivo. Asegúrate de que el archivo sea de texto plano y esté codificado en UTF-8.")
 
