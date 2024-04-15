@@ -12,7 +12,7 @@ def extraer_emails(texto):
     return emails_encontrados
 
 def guardar_archivo_temporal(archivo):
-    fd, ruta_archivo_temporal = tempfile.mkstemp()
+    _, ruta_archivo_temporal = tempfile.mkstemp()
     with open(ruta_archivo_temporal, 'wb') as f:
         f.write(archivo.read())
     return ruta_archivo_temporal
@@ -29,7 +29,7 @@ def main():
 
             # Guardar el archivo cargado en un archivo temporal
             ruta_archivo_temporal = guardar_archivo_temporal(archivo_cargado)
-            ruta_directorio = os.path.dirname(ruta_archivo_temporal)
+            ruta_directorio, _ = os.path.split(ruta_archivo_temporal)
             st.write("Directorio del archivo cargado:", ruta_directorio)
 
             # Extraer las direcciones de correo electrónico del texto original
