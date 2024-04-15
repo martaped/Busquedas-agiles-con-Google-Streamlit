@@ -34,7 +34,7 @@ def main():
             nombre_archivo_destino = st.text_input("Ingrese el nombre del archivo de destino (sin extensión):")
             if ruta_destino and nombre_archivo_destino:
                 # Combinar la ruta de destino y el nombre del archivo para obtener la ruta completa
-                ruta_archivo_destino = ruta_destino+'/'+ nombre_archivo_destino + ".txt"
+                ruta_archivo_destino = ruta_destino+nombre_archivo_destino + ".txt"
 
                 # Guardar el contenido en el archivo de destino
                 with open(ruta_archivo_destino, 'w', encoding='utf-8') as archivo_destino:
