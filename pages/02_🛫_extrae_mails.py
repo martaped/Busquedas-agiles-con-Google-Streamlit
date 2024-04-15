@@ -27,7 +27,7 @@ def main():
             st.subheader("Direcciones de correo electrónico encontradas:")
             for email in emails:
                 st.write(email)
-            
+            nombre_archivo_destino=""
             # Permitir al usuario elegir el nombre del archivo de destino
             nombre_archivo_destino = st.text_input("Ingrese el nombre del archivo de destino (sin extensión):")
             if nombre_archivo_destino:
@@ -37,7 +37,7 @@ def main():
                 with open(nombre_archivo_destino, 'w', encoding='utf-8') as archivo_destino:
                     for email in emails:
                         archivo_destino.write(email + '\n')
-
+                archivo_descargado=""
                 # Crear un botón de descarga para que el usuario pueda descargar el archivo
                 archivo_descargado=st.download_button(label="Descargar archivo", data=open(nombre_archivo_destino, 'rb').read(), file_name=nombre_archivo_destino)
                 if archivo_descargado is not None:
