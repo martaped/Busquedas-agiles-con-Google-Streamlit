@@ -18,10 +18,9 @@ def main():
 
     if archivo_cargado is not None:
         try:
-            # Obtener la ruta del directorio que contiene el archivo
-            nombre_archivo = archivo_cargado.name
-            ruta_archivo = os.path.abspath(nombre_archivo)
-            ruta_directorio_local = os.getcwd()  # Obtener la ruta del directorio actual
+            # Obtener la ruta del archivo cargado
+            ruta_archivo = os.path.dirname(archivo_cargado.name)
+            ruta_directorio_local = ruta_archivo.split(archivo_cargado.name)[0]
             st.write("Directorio del archivo cargado:", ruta_directorio_local)
             
             # Leer el contenido del archivo cargado
