@@ -21,15 +21,6 @@ def main():
         try:
             texto_original = archivo_cargado.read().decode("utf-8")
 
-            # Guardar el archivo cargado en el directorio actual
-            nombre_archivo_temporal = "archivo_temporal.txt"
-            with open(nombre_archivo_temporal, 'wb') as f:
-                f.write(archivo_cargado.read())
-
-            # Obtener la ruta del directorio actual
-            ruta_directorio = os.getcwd()
-            st.write("Directorio del archivo cargado:", ruta_directorio)
-
             # Extraer las direcciones de correo electrónico del texto original
             emails = extraer_emails(texto_original)
 
@@ -39,13 +30,18 @@ def main():
                 st.write(email)
             
             # Permitir al usuario elegir la ubicación y el nombre del archivo de destino
+            ruta_destino = st.text_input("Ingrese la ruta del directorio de destino para guardar el archivo (sin el nombre de archivo):")
             nombre_archivo_destino = st.text_input("Ingrese el nombre del archivo de destino (sin extensión):")
-            if nombre_archivo_destino:
-                nombre_archivo_destino += ".txt"
-                ruta_destino = os.path.join(ruta_directorio, nombre_archivo_destino)
-                shutil.move(nombre_archivo_temporal, ruta_destino)
+            if ruta_destino and nombre_archivo_destino:
+                # Combinar la ruta de destino y el nombre del archivo para obtener la ruta completa
+                ruta_archivo_destino = os.path.join(ruta_destino, nombre_archivo_destino + ".txt")
 
-                st.success(f"Las direcciones de correo electrónico se han guardado en {ruta_destino}")
+                # Guardar el contenido en el archivo de destino
+                with open(ruta_archivo_destino, 'w', encoding='utf-8') as archivo_destino:
+                    for email in emails:
+                        archivo_destino.write(email + '\n')
+
+                st.success(f"Las direcciones de correo electrónico se han guardado en {ruta_archivo_destino}")
         except UnicodeDecodeError:
             st.error("No se puede decodificar el archivo. Asegúrate de que el archivo sea de texto plano y esté codificado en UTF-8.")
 
