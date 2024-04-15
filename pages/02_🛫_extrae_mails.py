@@ -39,9 +39,9 @@ def main():
                         archivo_destino.write(email + '\n')
 
                 # Crear un botón de descarga para que el usuario pueda descargar el archivo
-                st.download_button(label="Descargar archivo", data=open(nombre_archivo_destino, 'rb').read(), file_name=nombre_archivo_destino)
-
-                st.success(f"Las direcciones de correo electrónico se han guardado en {nombre_archivo_destino}")
+                archivo_descargado=st.download_button(label="Descargar archivo", data=open(nombre_archivo_destino, 'rb').read(), file_name=nombre_archivo_destino)
+                if archivo_descargado is not None:
+                    st.success(f"Las direcciones de correo electrónico se han guardado en {nombre_archivo_destino}")
         except UnicodeDecodeError:
             st.error("No se puede decodificar el archivo. Asegúrate de que el archivo sea de texto plano y esté codificado en UTF-8.")
 
