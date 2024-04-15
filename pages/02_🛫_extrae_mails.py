@@ -1,7 +1,6 @@
 import streamlit as st
 import re
 import os
-import shutil
 
 # Función para extraer direcciones de correo electrónico de un texto
 def extraer_emails(texto):
@@ -29,19 +28,20 @@ def main():
             for email in emails:
                 st.write(email)
             
-            # Permitir al usuario elegir la ubicación y el nombre del archivo de destino
-            ruta_destino = st.text_input("Ingrese la ruta del directorio de destino para guardar el archivo (sin el nombre de archivo):")
+            # Permitir al usuario elegir el nombre del archivo de destino
             nombre_archivo_destino = st.text_input("Ingrese el nombre del archivo de destino (sin extensión):")
-            if ruta_destino and nombre_archivo_destino:
-                # Combinar la ruta de destino y el nombre del archivo para obtener la ruta completa
-                ruta_archivo_destino = ruta_destino+nombre_archivo_destino + ".txt"
-
-                # Guardar el contenido en el archivo de destino
-                with open(ruta_archivo_destino, 'w', encoding='utf-8') as archivo_destino:
+            if nombre_archivo_destino:
+                nombre_archivo_destino += ".txt"
+                
+                # Guardar el contenido en el archivo temporal
+                with open(nombre_archivo_destino, 'w', encoding='utf-8') as archivo_destino:
                     for email in emails:
                         archivo_destino.write(email + '\n')
 
-                st.success(f"Las direcciones de correo electrónico se han guardado en {ruta_archivo_destino}")
+                # Crear un botón de descarga para que el usuario pueda descargar el archivo
+                st.download_button(label="Descargar archivo", data=open(nombre_archivo_destino, 'rb').read(), file_name=nombre_archivo_destino)
+
+                st.success(f"Las direcciones de correo electrónico se han guardado en {nombre_archivo_destino}")
         except UnicodeDecodeError:
             st.error("No se puede decodificar el archivo. Asegúrate de que el archivo sea de texto plano y esté codificado en UTF-8.")
 
