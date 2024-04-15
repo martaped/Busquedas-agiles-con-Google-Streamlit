@@ -18,13 +18,12 @@ def main():
 
     if archivo_cargado is not None:
         try:
-            # Obtener la ruta del archivo cargado
-            ruta_archivo = os.path.dirname(archivo_cargado.name)
-            ruta_directorio_local = ruta_archivo.split(archivo_cargado.name)[0]
-            st.write("Directorio del archivo cargado:", ruta_directorio_local)
-            
-            # Leer el contenido del archivo cargado
             texto_original = archivo_cargado.read().decode("utf-8")
+
+            # Obtener la ruta del archivo cargado
+            nombre_archivo = archivo_cargado.name
+            ruta_archivo = os.path.dirname(nombre_archivo)
+            st.write("Directorio del archivo cargado:", ruta_archivo)
 
             # Extraer las direcciones de correo electrónico del texto original
             emails = extraer_emails(texto_original)
